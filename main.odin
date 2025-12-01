@@ -1,21 +1,20 @@
 package main
 import "core:fmt"
+import "core:strconv"
 import "core:os"
 
 main :: proc() {
-    dispatch := make(map[string]proc())
+    dispatch := make(map[string]proc()->int)
     defer delete(dispatch)
 
     set_up_dispatch(&dispatch);
     selected_proc := proc_from_args(&dispatch)
 
-
-    if selected_proc != nil {
-        selected_proc()
-    }
+    result := selected_proc()
+    fmt.println("result: ", result)
 }
 
-proc_from_args :: proc(dispatch: ^map[string]proc()) -> proc(){
+proc_from_args :: proc(dispatch: ^map[string]proc()->int) -> proc()->int{
     if len(os.args) < 2{
         fmt.println("Provide program arguments!")
         return nil
@@ -29,6 +28,7 @@ proc_from_args :: proc(dispatch: ^map[string]proc()) -> proc(){
     return selected_proc
 }
 
-set_up_dispatch :: proc(dispatch : ^map[string]proc()){
-    dispatch["day1"] = day_1
+set_up_dispatch :: proc(dispatch : ^map[string]proc()->int){
+    dispatch["day_1"] = day_1
+    dispatch["day_1_p2"] = day_1_p2
 }
