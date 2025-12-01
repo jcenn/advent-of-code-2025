@@ -3,7 +3,8 @@ package main
 import "core:strconv"
 import "core:strings"
 import "core:os"
-import "core:fmt"
+
+// count how many times dial lands at 0
 day_1 :: proc() -> int{
     path :: "input_day_1.txt"
     data, ok := os.read_entire_file(path)
@@ -34,6 +35,7 @@ day_1 :: proc() -> int{
     return zero_count
 }
 
+// count how many times dial goes through 0
 day_1_p2 :: proc() -> int{
     path :: "input_day_1.txt"
     data, ok := os.read_entire_file(path)
@@ -61,10 +63,13 @@ day_1_p2 :: proc() -> int{
         old_dial := dial
         dial += n
     
+        // overflow when going right
         if dial > 100{
             dial -= 100
             zero_count += 1
         }
+
+        // overflow when going left (have to exclude edge case where we start at 0 and go left)
         if dial < 0{
             dial += 100
             if old_dial != 0{
@@ -72,8 +77,8 @@ day_1_p2 :: proc() -> int{
             }
         }
 
-        dial %= 100
-        if dial == 0{ // either there has been overflow and we missed 0 or we landed straight on zero
+        dial %= 100 // when dial == 100
+        if dial == 0 { 
             zero_count += 1
         }
     }
