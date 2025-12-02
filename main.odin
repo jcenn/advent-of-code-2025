@@ -31,4 +31,6 @@ proc_from_args :: proc(dispatch: ^map[string]proc()->int) -> proc()->int{
 set_up_dispatch :: proc(dispatch : ^map[string]proc()->int){
     dispatch["day_1"] = day_1
     dispatch["day_1_p2"] = day_1_p2
+    dispatch["day_2"] = day_2
+    dispatch["day_2_p2"] = day_2_p2
 }
