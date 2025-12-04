@@ -3,18 +3,26 @@ import "core:fmt"
 import "core:strconv"
 import "core:os"
 
+// type alias to not repeat proc()->(int, int) all over the place
+advent_func :: proc()->(int, int)
+
 main :: proc() {
-    dispatch := make(map[string]proc()->int)
+    dispatch := make(map[string]advent_func)
     defer delete(dispatch)
 
     set_up_dispatch(&dispatch);
     selected_proc := proc_from_args(&dispatch)
-
-    result := selected_proc()
-    fmt.println("result: ", result)
+   
+    if selected_proc == nil {
+      return
+    }
+    p1_result, p2_result := selected_proc()
+    fmt.println("result:")
+    fmt.println("part 1:", p1_result)
+    fmt.println("part 2:", p2_result)
 }
 
-proc_from_args :: proc(dispatch: ^map[string]proc()->int) -> proc()->int{
+proc_from_args :: proc(dispatch: ^map[string]advent_func) -> advent_func{
     if len(os.args) < 2{
         fmt.println("Provide program arguments!")
         return nil
@@ -28,9 +36,8 @@ proc_from_args :: proc(dispatch: ^map[string]proc()->int) -> proc()->int{
     return selected_proc
 }
 
-set_up_dispatch :: proc(dispatch : ^map[string]proc()->int){
+set_up_dispatch :: proc(dispatch : ^map[string]advent_func){
     dispatch["day_1"] = day_1
-    dispatch["day_1_p2"] = day_1_p2
     dispatch["day_2"] = day_2
-    dispatch["day_2_p2"] = day_2_p2
+    dispatch["day_3"] = day_3
 }
