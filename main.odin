@@ -1,6 +1,5 @@
 package main
 import "core:fmt"
-import "core:strconv"
 import "core:os"
 
 // type alias to not repeat proc()->(int, int) all over the place
@@ -17,7 +16,6 @@ main :: proc() {
       return
     }
     p1_result, p2_result := selected_proc(os.args[1])
-    fmt.println("result:")
     fmt.println("part 1:", p1_result)
     fmt.println("part 2:", p2_result)
 }

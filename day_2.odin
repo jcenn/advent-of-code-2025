@@ -4,7 +4,6 @@ import "core:math"
 import "core:fmt"
 import "core:strconv"
 import "core:strings"
-import "core:os"
 
 has_duplicates :: proc(n:int, dup_count:int) -> bool {
    digits:int = int(math.floor(math.log10(f32(n)))) + 1
@@ -48,7 +47,6 @@ day_2 :: proc(input_path:string) -> (int, int) {
                   if k == 2 {
                      sum1+=n
                   }
-                  //fmt.println("found one: ", n, "with ", k, "duplicates")
                   sum2+=n
                   continue main_label
               }

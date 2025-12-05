@@ -2,9 +2,8 @@ package main
 
 import "core:strconv"
 import "core:strings"
-import "core:os"
 
-// count how many times dial lands at 0
+// count how many times dial lands at 0 / goes through 0
 day_1 :: proc(input_path:string) -> (int, int) {
     data := read_input_file(input_path)
     defer delete(data)

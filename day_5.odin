@@ -1,7 +1,5 @@
 package main
 
-import "core:fmt"
-import "core:math"
 import "core:strconv"
 import "core:strings"
 
@@ -41,9 +39,12 @@ day_5 :: proc(input_path:string) -> (int, int) {
         }
     }
 
+    res1 := 0
+    res2 := 0
+
     // Part 1
     // count all ids that are inside provided ranges
-    res1 := 0
+
     id_loop:
     for id_str in ids {
         id, _ := strconv.parse_int(id_str)
@@ -80,10 +81,8 @@ day_5 :: proc(input_path:string) -> (int, int) {
     //     }
     // }
    
-    // attempt 2 - combine overlappnig ranges (way better)
+    // attempt 2 - combine overlapping ranges (way better)
     
-    res2 := 0
-
     // iterate over all ranges and combine those that overlap
     for r, i in ranges[:len(ranges)-1] {
         if r == nil_range {

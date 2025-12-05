@@ -1,10 +1,6 @@
 package main
 
-import "core:math"
-import "core:fmt"
-import "core:strconv"
 import "core:strings"
-import "core:os"
 
 find_largest_number :: proc(s: string, battery_count: int) -> int {
     max_sum := 0
