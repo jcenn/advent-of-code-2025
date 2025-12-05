@@ -42,28 +42,28 @@ count_neighbours :: proc(grid: []string, x: int, y: int, width: int, height: int
     dirs := get_dirs(x, y, width, height)
     sum := 0
     if dirs.N {
-        sum += grid[y-1][x] == '@'
+        sum += (grid[y-1][x] == '@') ? 1 : 0
     }
     if dirs.NE {
-        sum += grid[y-1][x+1] == '@'
+        sum += (grid[y-1][x+1] == '@') ? 1 : 0
     }
     if dirs.E {
-        sum += grid[y][x+1] == '@'
+        sum += (grid[y][x+1] == '@') ? 1 : 0
     }
     if dirs.SE {
-        sum += grid[y+1][x+1] == '@'
+        sum += (grid[y+1][x+1] == '@') ? 1 : 0
     }
     if dirs.S {
-        sum += grid[y+1][x] == '@'
+        sum += (grid[y+1][x] == '@') ? 1 : 0
     }
     if dirs.SW {
-        sum += grid[y+1][x-1] == '@'
+        sum += (grid[y+1][x-1] == '@') ? 1 : 0
     }
     if dirs.W {
-        sum += grid[y][x-1] == '@'
+        sum += (grid[y][x-1] == '@') ? 1 : 0
     }
     if dirs.NW {
-        sum += grid[y-1][x-1] == '@'
+        sum += (grid[y-1][x-1] == '@') ? 1 : 0
     }
     return sum
 }
