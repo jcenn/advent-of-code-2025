@@ -29,12 +29,8 @@ find_largest_number :: proc(s: string, battery_count: int) -> int {
     return max_sum
 }
 
-day_3 :: proc() -> (int, int) {
-    path :: "./test_input.txt"
-    data, ok := os.read_entire_file(path)
-    if !ok{
-        panic_contextless("couldn't read provided file: " + path)
-    }
+day_3 :: proc(input_path:string) -> (int, int) {
+    data := read_input_file(input_path)
     defer delete(data)
     data_string := string(data)
     two_sum := 0

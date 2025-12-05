@@ -71,12 +71,8 @@ count_neighbours :: proc(grid: []string, x: int, y: int, width: int, height: int
     return sum
 }
 
-day_4 :: proc() -> (int, int) {
-    path :: "./input_day_4.txt"
-    data, ok := os.read_entire_file(path)
-    if !ok{
-        panic_contextless("couldn't read provided file: " + path)
-    }
+day_4 :: proc(input_path:string) -> (int, int) {
+    data := read_input_file(input_path)
     defer delete(data)
     data_string := string(data)
     lines := strings.split_lines(data_string)

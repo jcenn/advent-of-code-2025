@@ -25,12 +25,8 @@ has_duplicates :: proc(n:int, dup_count:int) -> bool {
    return res
 }
 
-day_2 :: proc() -> (int, int) {
-    path :: "./input_day_2.txt"
-    data, ok := os.read_entire_file(path)
-    if !ok{
-        panic_contextless("couldn't read provided file: " + path)
-    }
+day_2 :: proc(input_path:string) -> (int, int) {
+    data := read_input_file(input_path)
     defer delete(data)
     data_string := string(data)
 

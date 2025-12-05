@@ -4,7 +4,7 @@ import "core:strconv"
 import "core:os"
 
 // type alias to not repeat proc()->(int, int) all over the place
-advent_func :: proc()->(int, int)
+advent_func :: proc(input_path:string)->(int, int)
 
 main :: proc() {
     dispatch := make(map[string]advent_func)
@@ -16,7 +16,7 @@ main :: proc() {
     if selected_proc == nil {
       return
     }
-    p1_result, p2_result := selected_proc()
+    p1_result, p2_result := selected_proc(os.args[1])
     fmt.println("result:")
     fmt.println("part 1:", p1_result)
     fmt.println("part 2:", p2_result)
@@ -41,4 +41,15 @@ set_up_dispatch :: proc(dispatch : ^map[string]advent_func){
     dispatch["day_2"] = day_2
     dispatch["day_3"] = day_3
     dispatch["day_4"] = day_4
+    dispatch["day_5"] = day_5
+}
+
+read_input_file :: proc(path:string) -> []u8 {
+    full_path := fmt.aprintf("./inputs/%s.txt", path)
+    data, ok := os.read_entire_file(full_path)
+    if !ok{
+        err_msg := fmt.aprintf("couldn't open provided file: %s", full_path)
+        panic_contextless(err_msg)
+    }
+    return data
 }

@@ -5,12 +5,8 @@ import "core:strings"
 import "core:os"
 
 // count how many times dial lands at 0
-day_1 :: proc() -> (int, int) {
-    path :: "input_day_1.txt"
-    data, ok := os.read_entire_file(path)
-    if !ok{
-        panic_contextless("couldn't read provided file: " + path)
-    }
+day_1 :: proc(input_path:string) -> (int, int) {
+    data := read_input_file(input_path)
     defer delete(data)
     data_string := string(data)
 
