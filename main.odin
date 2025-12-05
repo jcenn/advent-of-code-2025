@@ -40,4 +40,5 @@ set_up_dispatch :: proc(dispatch : ^map[string]advent_func){
     dispatch["day_1"] = day_1
     dispatch["day_2"] = day_2
     dispatch["day_3"] = day_3
+    dispatch["day_4"] = day_4
 }
