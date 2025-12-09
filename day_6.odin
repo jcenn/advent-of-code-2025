@@ -62,7 +62,9 @@ day_6 :: proc(input_path:string) -> (int, int) {
         res1 += res
         i += 1
     }
-    
+    // part 2
+    // todo: iterate over the last line (operators), empty column is always right in front of operator 
+    // so we can fill array columns with string slices like line[last_op_index:next_op_index] and then iterate vertically to turn them into numbers
 
     //fmt.println(nums)
 
