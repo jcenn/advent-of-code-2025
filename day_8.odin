@@ -1,8 +1,6 @@
 package main
 
 import "core:slice"
-import "core:sort"
-import "core:math"
 import "core:fmt"
 import "core:strconv"
 import "core:strings"
@@ -14,7 +12,6 @@ Vec3i :: struct {
 }
 
 day_8 :: proc(input_path:string) -> (int, int) {
-    // data := read_input_file("test_input")
     data := read_input_file(input_path)
     defer delete(data)
     data_string := string(data)
@@ -27,7 +24,7 @@ day_8 :: proc(input_path:string) -> (int, int) {
     lines = lines[:height] // remove empty string after last line
     
     res1 := 0
-    res2 := 0
+    res2 := int(0)
 
     points := make([]Vec3i, height)
     defer delete(points)
@@ -72,35 +69,6 @@ day_8 :: proc(input_path:string) -> (int, int) {
             (p.p1.z - p.p2.z) * (p.p1.z - p.p2.z) 
         )
     }
-
-    // shortest point pairs
-    // for point, i in points {
-    //     min_point := Vec3i{}
-    //     min_distance := max(i64)
-    //     for point2, j in points {
-    //         if i == j{
-    //             continue // don't compare point with itself or with other points in the same circuit
-    //         }
-    //         // contains := false
-    //         // for k in 0..<pair_id {
-    //         //     if (tmp_pairs[k].p2 == point && tmp_pairs[k].p1 == point2){
-    //         //             contains = true
-    //         //     }
-    //         // }
-    //         // if contains {
-    //         //     continue
-    //         // }
-    //         distance := pair_distance(PointPair{point,point2})
-    //         if distance < min_distance {
-    //             min_point = point2
-    //             min_distance = distance
-    //         }
-    //     }
-    //     if min_point != {0,0,0} {
-    //         tmp_pairs[pair_id] = PointPair{point, min_point}
-    //         pair_id+=1
-    //     }
-    // }
     
     for point, i in points {
         for j in i..<len(points) {
@@ -108,49 +76,45 @@ day_8 :: proc(input_path:string) -> (int, int) {
                 continue // don't compare point with itself or with other points in the same circuit
             }
             point2 := points[j]
-            // contains := false
-            // for k in 0..<pair_id {
-            //     if (tmp_pairs[k].p2 == point && tmp_pairs[k].p1 == point2){
-            //             contains = true
-            //             break
-            //     }
-            // }
-            // if contains {
-            //     continue
-            // }
             tmp_pairs[pair_id] = PointPair{point, point2}
             pair_id+=1
         }
     }
-    fmt.println("filled points")
 
-
-    // bubble sort that shi
-    // for i in 1..<pair_id{
-    //     for j in 0..<pair_id-i {
-    //         if pair_distance(tmp_pairs[j]) > pair_distance(tmp_pairs[j+1]) {
-    //             tmp := tmp_pairs[j] 
-    //             tmp_pairs[j] = tmp_pairs[j+1]
-    //             tmp_pairs[j+1] = tmp
-    //         }
-    //     }
-    // }
     slice.sort_by(tmp_pairs[:pair_id], proc(a, b: PointPair) -> bool {
         return pair_distance(a) < pair_distance(b)
     })
 
-    fmt.println("bubbled and sorted")
 
-    pairs := tmp_pairs[:n]
-
-    // for p in pairs {
-    //     fmt.println(p, pair_distance(p))
-    // }
-    
+    // solving part 2
+    pairs := tmp_pairs[:]
+    tmp_map := make(map[Vec3i]^int)
+    defer delete(tmp_map)
+    for k, v in circuit_map {
+        tmp_map[k] = v
+    }
     i := 0
-    for n > 0{
-        pair := pairs[i]
-        i+=1
+    last_pair := PointPair{}
+    for pair in pairs{
+        if tmp_map[pair.p2] != tmp_map[pair.p1] {
+            last_pair = pair
+            ref, _ := tmp_map[pair.p2]
+            for k, v in tmp_map {
+                if v ==  ref {
+                    tmp_map[k] = tmp_map[pair.p1]
+                }
+            }
+        }
+    }
+
+    res2 = int(last_pair.p1.x * last_pair.p2.x)
+
+
+    // solving part 1
+    pairs = tmp_pairs[:n]
+
+    i = 0
+    for pair in pairs{
         if circuit_map[pair.p2] != circuit_map[pair.p1] {
             circuit_map[pair.p1]^ += circuit_map[pair.p2]^
             ref, _ := circuit_map[pair.p2]
@@ -161,43 +125,14 @@ day_8 :: proc(input_path:string) -> (int, int) {
             }
             ref^ = 0
         }
-        n-=1
     }
-    fmt.println("combined circuits")
-    // combine pairs into larger circuits
-    // for pair, i in point_pairs {
-    //     fmt.println(i+1, "st pair <------" )
-    //     fmt.println("comparing", pair.p1, pair.p2)
-    //     fmt.println("with circuit lengths", circuit_map[pair.p1]^, circuit_map[pair.p2]^)
-    //     if circuit_map[pair.p1] == circuit_map[pair.p2]{
-    //         fmt.println("skipped because they're part of the same circuit" )
-    //         continue
-    //     }
-    //     circuit_map[pair.p1]^ += circuit_map[pair.p2]^
-    //     circuit_map[pair.p2] = circuit_map[pair.p1]
-    //     fmt.println("combined into a circuit of length", circuit_map[pair.p1]^)
-    // }
-    
-
-        
-    // can't be bothered to read core::sort docs so we bubble sort dat shit
-    // for i in 1..<len(circuit_lengths){
-    //     for j in 0..<len(circuit_lengths)-i {
-    //         if circuit_lengths[j] < circuit_lengths[j+1] {
-    //             tmp := circuit_lengths[j]
-    //             circuit_lengths[j] = circuit_lengths[j+1] 
-    //             circuit_lengths[j+1] = tmp
-    //         }
-    //     }
-    // }
-
     slice.sort_by(circuit_lengths[:], proc(a, b: int) -> bool {
         return a > b
     })
-
-    fmt.println("sorted circuit lengths")
     
-    fmt.println(circuit_lengths[0], circuit_lengths[1], circuit_lengths[2])
     res1 = circuit_lengths[0] * circuit_lengths[1] * circuit_lengths[2]
+
+    
+    
     return res1, res2
 }
