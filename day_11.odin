@@ -74,29 +74,59 @@ day_11 :: proc(input_path:string) -> (int, int) {
     // square matrix
     count_paths :: proc(start:string, end:string, graph:[][]bool, graph_indexes: map[string]uint) -> int{
         visited_graph := make([]bool, len(graph))
+        defer delete(visited_graph)
         // TODO: need to delete those 2 (not really)
+        good_indexes := make(map[int]bool)
+        defer delete(good_indexes)
+        changed := true
+        for changed {
+            changed = false
+            for i in 0..<len(graph) {
+                if i == int(graph_indexes[end]) || i in good_indexes{
+                    continue
+                }
+                if graph[i][graph_indexes[end]]{
+                    good_indexes[i] = true
+                    changed = true
+                    continue
+                }
+                for k, v in good_indexes {
+                    if graph[i][k] {
+                        good_indexes[i] = true
+                        changed = true
+                        break
+                    }
+                }
+            }
+        }
+        fmt.println("finished changed")
+        // at this point good_indexes should contains all indexes that point (in)directly at end
 
         q: queue.Queue(uint)
         queue.init(&q)
         defer queue.destroy(&q)
         
-        queue.push_back(&q, graph_indexes["you"])
+        queue.push_back(&q, graph_indexes[start])
         count := 0
         for queue.len(q) > 0 {
             idx := queue.pop_front(&q)
-            visited_graph[idx] = true
 
+            // fmt.println("analyzing idx: ", idx)
+
+            visited_graph[idx] = true
+            if !(int(idx) in good_indexes) { // we checked beforehand that this index is not connected to end
+                continue
+            }
             for connected, i in graph[idx] {
-                if !connected {
+                if uint(i) == idx || !connected || visited_graph[i] {
                     continue
                 }
-                if uint(i) == graph_indexes["out"] {
+                if uint(i) == graph_indexes[end] {
+                    // fmt.println("found connection")
                     count += 1
                     continue
                 }
-                if !visited_graph[i] {
-                    queue.push_back(&q, uint(i))
-                }
+                queue.push_back(&q, uint(i))
             }
         }
         return count
@@ -104,8 +134,10 @@ day_11 :: proc(input_path:string) -> (int, int) {
     // print_graph(graph, graph_indexes)
 
     res1 := count_paths("you", "out", graph, graph_indexes)
-        
-    res2 := 0
+    fmt.println("solved part 1")
+
+    fmt.println("solved second variant of part 2")
+    res2 := 0 
 
     return res1, res2
 }
