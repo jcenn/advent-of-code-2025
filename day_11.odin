@@ -46,10 +46,6 @@ day_11 :: proc(input_path:string) -> (int, int) {
     for y in 0..<height + 1 {
         graph[y] = make([]bool, height + 1) // plus 1 to make room for "out"
     }
-    // square matrix
-
-    visited_graph := make([]bool, height + 1)
-    // TODO: need to delete those 2 (not really)
 
     graph_indexes := make(map[string]uint)
     defer delete(graph_indexes)
@@ -75,33 +71,39 @@ day_11 :: proc(input_path:string) -> (int, int) {
             graph[graph_indexes[id_str]][graph_indexes[s]] = true
         }
     }
-    q: queue.Queue(uint)
-    queue.init(&q)
-    defer queue.destroy(&q)
-    
-    queue.push_back(&q, graph_indexes["you"])
-    count := 0
-    for queue.len(q) > 0 {
-        idx := queue.pop_front(&q)
-        visited_graph[idx] = true
+    // square matrix
+    count_paths :: proc(start:string, end:string, graph:[][]bool, graph_indexes: map[string]uint) -> int{
+        visited_graph := make([]bool, len(graph))
+        // TODO: need to delete those 2 (not really)
 
-        for connected, i in graph[idx] {
-            if !connected {
-                continue
-            }
-            if uint(i) == graph_indexes["out"] {
-                count += 1
-                continue
-            }
-            if !visited_graph[i] {
-                queue.push_back(&q, uint(i))
+        q: queue.Queue(uint)
+        queue.init(&q)
+        defer queue.destroy(&q)
+        
+        queue.push_back(&q, graph_indexes["you"])
+        count := 0
+        for queue.len(q) > 0 {
+            idx := queue.pop_front(&q)
+            visited_graph[idx] = true
+
+            for connected, i in graph[idx] {
+                if !connected {
+                    continue
+                }
+                if uint(i) == graph_indexes["out"] {
+                    count += 1
+                    continue
+                }
+                if !visited_graph[i] {
+                    queue.push_back(&q, uint(i))
+                }
             }
         }
+        return count
     }
-
     // print_graph(graph, graph_indexes)
 
-    res1 := count
+    res1 := count_paths("you", "out", graph, graph_indexes)
         
     res2 := 0
 
