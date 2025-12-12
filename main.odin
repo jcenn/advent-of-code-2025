@@ -46,6 +46,7 @@ set_up_dispatch :: proc(dispatch : ^map[string]advent_func){
     dispatch["day_9"] = day_9
     dispatch["day_10"] = day_10
     dispatch["day_11"] = day_11
+    dispatch["day_12"] = day_12
 }
 
 read_input_file :: proc(path:string) -> []u8 {
